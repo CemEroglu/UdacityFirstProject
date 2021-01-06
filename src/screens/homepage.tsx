@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
 import * as BooksAPI from '../BooksAPI'
 import '../App.css'
+import { updateObjectBindingPattern } from "typescript";
+
+import {useHistory} from 'react-router-dom'
 
 const HomePage = () => {
+    const history = useHistory();
     const [bookdata, setbookdata] = useState([]);
     useEffect(() => {
         BooksAPI.getAll().then((data) => {
             setbookdata(data)
         })
     }, [])
+    const updatebookdata=()=>{
+        BooksAPI.getAll().then((data) => {
+            setbookdata(data)
+        })
+    }
     return (
 
         <div className="list-books">
@@ -29,7 +38,11 @@ const HomePage = () => {
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + item.imageLinks.thumbnail + ')' }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select>
+                                                    <select onChange={(event:any)=>{
+                                                        BooksAPI.update(item, event.target.value).then(()=>{
+                                                            updatebookdata()
+                                                        })
+                                                    }}>
                                                         <option value="move" disabled>Move to...</option>
                                                         <option value="currentlyReading">Currently Reading</option>
                                                         <option value="wantToRead">Want to Read</option>
@@ -43,19 +56,11 @@ const HomePage = () => {
                                                 return item + ','
                                             })}</div>
                                         </div>
-
-
-
-
                                     </li>
-
-
                                 })}
                             </ol>
                         </div>
                     </div>
-
-
 
                     <div className="bookshelf">
                         <h2 className="bookshelf-title">Want to Read</h2>
@@ -69,10 +74,14 @@ const HomePage = () => {
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + item.imageLinks.thumbnail + ')' }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select>
+                                                    <select onChange={(event:any)=>{
+                                                        BooksAPI.update(item, event.target.value).then(()=>{
+                                                            updatebookdata()
+                                                        })
+                                                    }}>
                                                         <option value="move" disabled>Move to...</option>
-                                                        <option value="currentlyReading">Currently Reading</option>
                                                         <option value="wantToRead">Want to Read</option>
+                                                        <option value="currentlyReading">Currently Reading</option>
                                                         <option value="read">Read</option>
                                                         <option value="none">None</option>
                                                     </select>
@@ -83,19 +92,11 @@ const HomePage = () => {
                                                 return item + ','
                                             })}</div>
                                         </div>
-
-
-
-
                                     </li>
-
-
                                 })}
                             </ol>
                         </div>
                     </div>
-
-
 
                     <div className="bookshelf">
                         <h2 className="bookshelf-title">Read</h2>
@@ -109,11 +110,15 @@ const HomePage = () => {
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + item.imageLinks.thumbnail + ')' }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select>
+                                                    <select onChange={(event:any)=>{
+                                                        BooksAPI.update(item, event.target.value).then(()=>{
+                                                            updatebookdata()
+                                                        })
+                                                    }}>
                                                         <option value="move" disabled>Move to...</option>
+                                                        <option value="read">Read</option>
                                                         <option value="currentlyReading">Currently Reading</option>
                                                         <option value="wantToRead">Want to Read</option>
-                                                        <option value="read">Read</option>
                                                         <option value="none">None</option>
                                                     </select>
                                                 </div>
@@ -123,13 +128,7 @@ const HomePage = () => {
                                                 return item + ','
                                             })}</div>
                                         </div>
-
-
-
-
                                     </li>
-
-
                                 })}
                             </ol>
                         </div>
@@ -137,10 +136,14 @@ const HomePage = () => {
                 </div>
             </div>
             <div className="open-search">
-              <button onClick={() => alert('+')}>Add a book</button>
+              <button onClick={() => {
+                history.push('/search');
+              }
+              }>Add a book</button>
             </div>
 
         </div>
     );
 }
 export default HomePage;
+
