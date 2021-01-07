@@ -56,7 +56,8 @@ const SearchPage = () => {
 
                     {bookdata ? (
                         bookdata.map((item: any) => {
-
+                            if(item.title &&item.imageLinks &&item.imageLinks.thumbnail && item.title && item.authors ){
+                                
                             return <li>
 
                                 <div className="book">
@@ -80,7 +81,7 @@ const SearchPage = () => {
                                             return item + ','
                                         })}</div> : ''}
                                 </div>
-                            </li>
+                            </li>}
                         }))
                         : ''}
 
