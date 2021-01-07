@@ -14,7 +14,11 @@ const SearchPage = () => {
         if (searchWord) {
             BooksAPI.search(searchWord).then(
                 (data) => {
-                    if (data) {
+                    console.log(data)
+                    if (data.hasOwnProperty('error')) {
+                        setbookdata([])
+                    }
+                    else{
                         setbookdata(data)
                     }
                 })
