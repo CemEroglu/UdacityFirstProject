@@ -3,7 +3,7 @@ import * as BooksAPI from '../BooksAPI'
 import '../App.css'
 import { updateObjectBindingPattern } from "typescript";
 
-import {useHistory} from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 const HomePage = () => {
     const history = useHistory();
@@ -13,13 +13,12 @@ const HomePage = () => {
             setbookdata(data)
         })
     }, [])
-    const updatebookdata=()=>{
+    const updatebookdata = () => {
         BooksAPI.getAll().then((data) => {
             setbookdata(data)
         })
     }
     return (
-
         <div className="list-books">
             <div className="list-books-title">
                 <h1>MyReads</h1>
@@ -31,15 +30,13 @@ const HomePage = () => {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {bookdata.filter((item: any) => item.shelf === 'currentlyReading').map((item: any) => {
-
-                                    return <li>
-
+                                    return <li key={item.id}>
                                         <div className="book">
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + item.imageLinks.thumbnail + ')' }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select onChange={(event:any)=>{
-                                                        BooksAPI.update(item, event.target.value).then(()=>{
+                                                    <select onChange={(event: any) => {
+                                                        BooksAPI.update(item, event.target.value).then(() => {
                                                             updatebookdata()
                                                         })
                                                     }}>
@@ -52,9 +49,7 @@ const HomePage = () => {
                                                 </div>
                                             </div>
                                             <div className="book-title">{item.title}</div>
-                                            <div className="book-authors">{item.authors.map((item: any) => {
-                                                return item + ','
-                                            })}</div>
+                                            <div className="book-authors">{item.authors.join(', ')}</div>
                                         </div>
                                     </li>
                                 })}
@@ -68,14 +63,14 @@ const HomePage = () => {
                             <ol className="books-grid">
                                 {bookdata.filter((item: any) => item.shelf === 'wantToRead').map((item: any) => {
 
-                                    return <li>
+                                    return <li key={item.id}>
 
                                         <div className="book">
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + item.imageLinks.thumbnail + ')' }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select onChange={(event:any)=>{
-                                                        BooksAPI.update(item, event.target.value).then(()=>{
+                                                    <select onChange={(event: any) => {
+                                                        BooksAPI.update(item, event.target.value).then(() => {
                                                             updatebookdata()
                                                         })
                                                     }}>
@@ -88,9 +83,7 @@ const HomePage = () => {
                                                 </div>
                                             </div>
                                             <div className="book-title">{item.title}</div>
-                                            <div className="book-authors">{item.authors.map((item: any) => {
-                                                return item + ','
-                                            })}</div>
+                                            <div className="book-authors">{item.authors.join(', ')}</div>
                                         </div>
                                     </li>
                                 })}
@@ -103,15 +96,13 @@ const HomePage = () => {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {bookdata.filter((item: any) => item.shelf === 'read').map((item: any) => {
-
-                                    return <li>
-
+                                    return <li key={item.id}>
                                         <div className="book">
                                             <div className="book-top">
                                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + item.imageLinks.thumbnail + ')' }}></div>
                                                 <div className="book-shelf-changer">
-                                                    <select onChange={(event:any)=>{
-                                                        BooksAPI.update(item, event.target.value).then(()=>{
+                                                    <select onChange={(event: any) => {
+                                                        BooksAPI.update(item, event.target.value).then(() => {
                                                             updatebookdata()
                                                         })
                                                     }}>
@@ -124,9 +115,10 @@ const HomePage = () => {
                                                 </div>
                                             </div>
                                             <div className="book-title">{item.title}</div>
-                                            <div className="book-authors">{item.authors.map((item: any) => {
+                                            <div className="book-authors">{item.authors.join(', ')}</div>
+                                            {/* <div className="book-authors">{item.authors.map((item: any) => {
                                                 return item + ','
-                                            })}</div>
+                                            })}</div> */}
                                         </div>
                                     </li>
                                 })}
@@ -136,10 +128,11 @@ const HomePage = () => {
                 </div>
             </div>
             <div className="open-search">
-              <button onClick={() => {
-                history.push('/search');
-              }
-              }>Add a book</button>
+                <button onClick={() => {
+                    history.push('/search');
+                }
+                }>Add a book</button>
+                {/* <Link className="open-search" to='/search'>Add a book</Link> */}
             </div>
 
         </div>

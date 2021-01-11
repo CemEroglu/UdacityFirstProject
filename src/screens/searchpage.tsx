@@ -7,20 +7,17 @@ import { useHistory } from 'react-router-dom'
 import { strict } from "assert";
 
 const SearchPage = () => {
-
     const history = useHistory();
     const [bookdata, setbookdata] = useState([]);
     const [searchWord, setsearchWord] = useState('');
-
-    const [currentlyReadingBooks, setcurrentlyReadingBooks] = useState([]as any);
-    const [wanttoReadBooks, setwanttoReadBooks] = useState([]as any);
+    const [currentlyReadingBooks, setcurrentlyReadingBooks] = useState([] as any);
+    const [wanttoReadBooks, setwanttoReadBooks] = useState([] as any);
     const [readBooks, setreadBooks] = useState([] as any);
 
     useEffect(() => {
         if (searchWord) {
             BooksAPI.search(searchWord).then(
                 (data) => {
-                    console.log(data)
                     if (data.hasOwnProperty('error')) {
                         setbookdata([])
                     }
@@ -29,6 +26,9 @@ const SearchPage = () => {
                     }
                 })
         }
+        else {
+            setbookdata([])
+        }
         // BooksAPI.getAll().then((data) => {
         //     setbookdata(data)
         // })
@@ -36,10 +36,9 @@ const SearchPage = () => {
     }, [searchWord])
     useEffect(() => {
         BooksAPI.getAll().then((data) => {
-            console.log(data)
-            let readBooksID=[] as any;
-            let curentlyreadBooksID=[] as any;
-            let wanttoreadBooksID=[] as any;  
+            let readBooksID = [] as any;
+            let curentlyreadBooksID = [] as any;
+            let wanttoreadBooksID = [] as any;
             data.map((item: any) => {
                 if (item.shelf === 'read') {
                     readBooksID.push(item.id)
@@ -57,8 +56,6 @@ const SearchPage = () => {
         })
     }, [])
     return (
-
-
         <div className="search-books">
             <div className="search-books-bar">
                 <button className="close-search" onClick={() => history.push('/')}>Close</button>
@@ -77,27 +74,20 @@ const SearchPage = () => {
                 </div>
             </div>
             <div className="search-books-results">
-
-
                 <ol className="books-grid">
-
-
                     {bookdata ? (
                         bookdata.map((item: any) => {
                             if (item.title && item.imageLinks && item.imageLinks.thumbnail && item.title && item.authors) {
-
-                                return <li>
-
+                                return <li key={item.id}>
                                     <div className="book">
                                         <div className="book-top">
                                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url(' + item.imageLinks.thumbnail + ')' }}></div>
                                             <div className="book-shelf-changer">
                                                 <select value={
-                                                    
-                                                    readBooks.includes(item.id)?'read':(
-                                                    currentlyReadingBooks.includes(item.id)?'currentlyReading':(
-                                                        wanttoReadBooks.includes(item.id)?'wantToRead':'none'
-                                                    ))
+                                                    readBooks.includes(item.id) ? 'read' : (
+                                                        currentlyReadingBooks.includes(item.id) ? 'currentlyReading' : (
+                                                            wanttoReadBooks.includes(item.id) ? 'wantToRead' : 'none'
+                                                        ))
                                                 } onChange={(event: any) => {
                                                     BooksAPI.update(item, event.target.value)
                                                 }}>
@@ -111,20 +101,16 @@ const SearchPage = () => {
                                         </div>
                                         <div className="book-title">{item.title}</div>
                                         {item.authors ?
-                                            <div className="book-authors">{item.authors.map((item: any) => {
-                                                return item + ','
-                                            })}</div> : ''}
+                                            <div className="book-authors">{item.authors.join(', ')}</div> : ''}
                                     </div>
                                 </li>
                             }
                         }))
-                        : ''}
-
-
+                        : ''
+                    }
                 </ol>
             </div>
         </div>
-
     );
 }
 export default SearchPage;
